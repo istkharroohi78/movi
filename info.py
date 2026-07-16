@@ -46,7 +46,7 @@ FTMBOTZX_MOVIE_UPDATE_CHANNEL = int(environ.get('UPDATE_CHANNEL', '-100225442113
 PREMIUM_LOGS = int(environ.get('PREMIUM_LOGS', '-1002155804090'))  # Premium logs channel id
 auth_channel = environ.get('AUTH_CHANNEL', '-1002254421138')  # Channel/Group ID for force sub (make sure bot is admin)
 DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '-1003648004418').split()]
-support_chat_id = environ.get('SUPPORT_CHAT_ID', '-1003648004418')  # Support group id (make sure bot is admin)
+support_chat_id = environ.get('SUPPORT_CHAT_ID', '-1003738160966')  # Support group id (make sure bot is admin)
 reqst_channel = environ.get('REQST_CHANNEL_ID', '-1003648004418')  # Request channel id (make sure bot is admin)
 AUTH_CHANNEL = [int(fch) if id_pattern.search(fch) else fch for fch in environ.get('AUTH_CHANNEL', '-1002926855756').split()]
 MULTI_FSUB = [int(channel_id) for channel_id in environ.get('MULTI_FSUB', '-1001957497326 -1002254421138').split() if re.match(r'^-?\d+$', channel_id)]  # Channel for force sub (make sure bot is admin)
@@ -85,7 +85,7 @@ CAPTION_LANGUAGES = ["Bhojpuri", "Hindi", "Bengali", "Tamil", "English", "Bangla
 VERIFY = bool(environ.get('VERIFY', False))  # Verification On (True) / Off (False)
 FTMBOTZX_VERIFY_EXPIRE = int(environ.get('FTMBOTZX_VERIFY_EXPIRE', 48))  # Add time in hours
 FTMBOTZX_VERIFIED_LOG = int(environ.get('FTMBOTZX_VERIFIED_LOG', '-1002120758420'))  # Log channel id (make sure bot is admin)
-HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/ftmbotzx/2')  # How to open tutorial link for verification
+HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/sukoon_s')  # How to open tutorial link for verification
 
 # ============================
 # Link Shortener Configuration
