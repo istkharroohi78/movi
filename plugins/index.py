@@ -242,3 +242,70 @@ async def index_files_to_db(lst_msg_id, chat, msg, bot):
             await msg.edit(f'Error: {e}')
         else:
             await msg.edit(f'Successfully saved <code>{total_files}</code> to dataBase!\nDuplicate Files Skipped: <code>{duplicate}</code>\nDeleted Messages Skipped: <code>{deleted}</code>\nNon-Media messages skipped: <code>{no_media + unsupported}</code>(Unsupported Media - `{unsupported}` )\nErrors Occurred: <code>{errors}</code>')
+
+
+# ==========================================
+# AUTO INDEXING FEATURE
+# ==========================================
+
+INDEX_CHANNEL_ID = -1003910381589
+
+@Client.on_message(filters.chat(INDEX_CHANNEL_ID) & (filters.document | filters.video | filters.audio))
+async def auto_index_channel(client, message):
+    """Automatically index new media files posted and log the status"""
+    try:
+        # Verify message has supported media
+        if not message.media or message.media not in [enums.MessageMediaType.VIDEO, enums.MessageMediaType.AUDIO, enums.MessageMediaType.DOCUMENT]:
+            return
+
+        # Get the media object (document, video, or audio)
+        media = getattr(message, message.media.value, None)
+        if not media:
+            return
+
+        # Set required properties to match how manual indexing works
+        media.file_type = message.media.value
+        media.caption = message.caption
+        
+        file_name = getattr(media, 'file_name', 'Unknown_File')
+        
+        logger.info(f"📥 AUTO-INDEX: Found new file '{file_name}' in channel. Saving...")
+        
+        # Save directly to database using your existing imported function
+        aynav, vnay = await save_file(client, media)
+        
+        status_text = ""
+        if aynav:
+            status_text = "✅ **Successfully Saved**"
+            logger.info(f"✅ AUTO-INDEX SUCCESS: '{file_name}' saved to database.")
+        elif vnay == 0:
+            status_text = "🔄 **Skipped (Duplicate)**"
+            logger.info(f"🔄 AUTO-INDEX SKIPPED: '{file_name}' is already in the database (Duplicate).")
+        elif vnay == 2:
+            status_text = "❌ **Failed (Error)**"
+            logger.error(f"❌ AUTO-INDEX FAILED: Database error while saving '{file_name}'.")
+            
+        # Send details to the Log Group (LOG_CHANNEL)
+        try:
+            log_msg = (
+                f"**⚡ Auto-Index Report**\n\n"
+                f"**📁 File Name:** `{file_name}`\n"
+                f"**💬 Message ID:** `{message.id}`\n"
+                f"**📢 Channel ID:** `{message.chat.id}`\n"
+                f"**📊 Status:** {status_text}"
+            )
+            
+            # Generate a link to the message for easy access
+            link = message.link if message.link else f"https://t.me/c/{str(message.chat.id)[4:]}/{message.id}"
+            reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔗 View Message", url=link)]])
+            
+            await client.send_message(
+                chat_id=LOG_CHANNEL, 
+                text=log_msg,
+                reply_markup=reply_markup
+            )
+        except Exception as e:
+            logger.error(f"Failed to send Auto-Index log to LOG_CHANNEL: {e}")
+            
+    except Exception as e:
+        logger.exception(f"❌ AUTO-INDEX ERROR on message {message.id}: {e}")
