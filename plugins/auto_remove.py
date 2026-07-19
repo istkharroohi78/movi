@@ -1,4 +1,3 @@
-
 import asyncio
 import logging
 from datetime import datetime, timedelta
@@ -18,24 +17,31 @@ async def schedule_message_deletion_with_countdown(chat_id: int, message_id: int
     """Schedule message deletion with countdown logging"""
     try:
         # Log initial scheduling
-        logger.info(f"⏰ AUTO-DELETE: Scheduled deletion for {message_type} message ID {message_id} in '{chat_title}' ({chat_id}) in 20 seconds")
+        logger.info(f"⏰ AUTO-DELETE: Scheduled deletion for {message_type} message ID {message_id} in '{chat_title}' ({chat_id}) in 5 minutes")
         
-        # Wait and log countdown
-        await asyncio.sleep(10)
+        # Wait 4 minutes and log
+        await asyncio.sleep(240)
+        logger.info(f"⏳ AUTO-DELETE: {message_type} message ID {message_id} in '{chat_title}' ({chat_id}) will be deleted in 60 seconds...")
+        
+        # Wait 50 seconds and log
+        await asyncio.sleep(50)
         logger.info(f"⏳ AUTO-DELETE: {message_type} message ID {message_id} in '{chat_title}' ({chat_id}) will be deleted in 10 seconds...")
         
+        # Wait 5 seconds and log
         await asyncio.sleep(5)
         logger.info(f"⏳ AUTO-DELETE: {message_type} message ID {message_id} in '{chat_title}' ({chat_id}) will be deleted in 5 seconds...")
         
+        # Wait 4 seconds and log
         await asyncio.sleep(4)
         logger.info(f"🔥 AUTO-DELETE: Deleting {message_type} message ID {message_id} from '{chat_title}' ({chat_id}) NOW...")
         
+        # Wait 1 second
         await asyncio.sleep(1)
         
         # Attempt to delete the message
         try:
             await FtmbotzxBot.delete_messages(chat_id=chat_id, message_ids=message_id)
-            logger.info(f"✅ AUTO-DELETE SUCCESS: {message_type} message ID {message_id} deleted from '{chat_title}' ({chat_id}) after 20 seconds")
+            logger.info(f"✅ AUTO-DELETE SUCCESS: {message_type} message ID {message_id} deleted from '{chat_title}' ({chat_id}) after 5 minutes")
         except Exception as e:
             logger.warning(f"❌ AUTO-DELETE FAILED: Could not delete {message_type} message ID {message_id} from '{chat_title}' ({chat_id}): {e}")
         
@@ -62,7 +68,7 @@ def schedule_user_message_deletion(chat_id: int, message_id: int, chat_title: st
         pending_deletions[(chat_id, message_id)] = task
         
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        delete_time = (datetime.now() + timedelta(seconds=20)).strftime("%H:%M:%S")
+        delete_time = (datetime.now() + timedelta(minutes=5)).strftime("%H:%M:%S")
         
         logger.info(f"📥 USER MESSAGE TRACKED:")
         logger.info(f"   • Group: '{chat_title}' ({chat_id})")
@@ -89,7 +95,7 @@ async def hooked_send_message(chat_id, text, *args, **kwargs):
                 chat_title = getattr(chat, 'title', 'Unknown Group')
                 message_id = result.id
                 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                delete_time = (datetime.now() + timedelta(seconds=20)).strftime("%H:%M:%S")
+                delete_time = (datetime.now() + timedelta(minutes=5)).strftime("%H:%M:%S")
                 
                 # Get message content
                 message_text = ""
@@ -148,7 +154,7 @@ async def auto_delete_status(client, message: Message):
         f"📊 **Auto-Delete Status:**\n"
         f"• Status: **{status}**\n"
         f"• Pending deletions: **{pending_count}**\n"
-        f"• Delete delay: **20 seconds**\n"
+        f"• Delete delay: **5 minutes**\n"
         f"• Applies to: Groups and Supergroups only\n"
         f"• Deletes: Both user queries and bot responses"
     )
