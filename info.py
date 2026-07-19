@@ -69,14 +69,14 @@ OWNER_UPI_ID = environ.get('OWNER_UPI_ID', 'shivashish-kumar@ptyes')
 # ============================
 DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://movieboxpremium:tumchutiyaho@moviebox.hgoqntp.mongodb.net/?appName=moviebox")
 DATABASE_URI2 = environ.get('DATABASE_URI2', "mongodb+srv://movieboxpremium:tumchutiyaho@moviebox.hgoqntp.mongodb.net/?appName=moviebox")
-DATABASE_NAME = environ.get('DATABASE_NAME', "meher")
+DATABASE_NAME = environ.get('DATABASE_NAME', "shiv")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'meher')
 
 # ============================
 # Movie Notification & Update Settings
 # ============================
 FTMBOTZX_MOVIE_UPDATE_NOTIFICATION = bool(environ.get('FTMBOTZX_MOVIE_UPDATE_NOTIFICATION', False))  # Notification On (True) / Off (False)
-FTMBOTZX_IMAGE_FETCH = bool(environ.get('FTMBOTZX_IMAGE_FETCH', False))  # On (True) / Off (False)
+FTMBOTZX_IMAGE_FETCH = bool(environ.get('FTMBOTZX_IMAGE_FETCH', True))  # On (True) / Off (False)
 CAPTION_LANGUAGES = ["Bhojpuri", "Hindi", "Bengali", "Tamil", "English", "Bangla", "Telugu", "Malayalam", "Kannada", "Marathi", "Punjabi", "Bengoli", "Gujrati", "Korean", "Gujarati", "Spanish", "French", "German", "Chinese", "Arabic", "Portuguese", "Russian", "Japanese", "Odia", "Assamese", "Urdu"]
 
 # ============================
@@ -135,12 +135,12 @@ LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "True"),
 SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "True"), True)
 MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
 INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
-FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '')).split()]
+FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '-1003910381589')).split()]
 MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "True")), True)
 PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "False")), False)
 PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "False")), True)
 PM_SEARCH = bool(environ.get('PM_SEARCH', True))  # PM Search On (True) / Off (False)
-EMOJI_MODE = bool(environ.get('EMOJI_MODE', True))  # Emoji status On (True) / Off (False)
+EMOJI_MODE = bool(environ.get('EMOJI_MODE', False))  # Emoji status On (True) / Off (False)
 
 # ============================
 # Bot Configuration
